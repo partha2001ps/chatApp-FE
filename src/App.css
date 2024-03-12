@@ -46,3 +46,24 @@
 .sign-up-form button[type="submit"]:hover {
     background-color: #0056b3;
 }
+.user{
+    margin-top: 5%;
+    margin-bottom: -5%;
+    border: none;
+    width: 400px;
+   text-align: left;
+   height: 40px;
+}
+.hr{
+    width: 400px;
+}
+.mgs{
+    color: red;
+    font-size: xx-large;
+    margin-left: 50%;
+}
+.left{
+    width: 500px;
+    background-color: #cedeef;
+    height: 90vh;
+}

@@ -23,10 +23,11 @@ function SignIn() {
           console.log(res.data);
         setMgs(res.data.message);
         setLoading(false)
-          if (res.data.message === 'User Login success') {
+        if (res.data.message === 'User Login success') {
+          sessionStorage.setItem('userData', JSON.stringify(res.data));
               navigate('/chat');
           } else {
-              navigate('/signin');
+              navigate('/');
           }
           setFormData({ email: '', password: '' });
       } catch (error) {
@@ -67,7 +68,8 @@ function SignIn() {
                     onChange={handleChange}
                   />
                 </div>
-                <Link className=' mt-5' to='/'>If new user Signup</Link>
+                <Link className=' mt-5' to='/signup'>If new user Signup</Link>
+                <Link className=' m-5' to='/reset-password'>Reset Password</Link>
                 <div className="text-center">
                   <button className='submit' type='submit'>{loading ? (<div><RotatingLines
                     visible={true}
