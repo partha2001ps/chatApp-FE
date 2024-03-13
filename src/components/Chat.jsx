@@ -90,8 +90,15 @@ function Chat() {
           <div className="right" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             {selectedUser && (
               <>
-                <h3 className="selected-user-name">{selectedUser.name}</h3>
-                <div className="chat-box" style={{ height: "78vh", overflowY: "scroll", position: "relative" }}>
+                <div className="selected-user-name" style={{ display: 'flex' }}>
+                  {!view && (
+                    <div className="d-md-none">
+                      <button className="btn" onClick={() => setView(true)}>🔙</button>
+                    </div>
+                  )}
+                  <h3 className='name'>{selectedUser.name}</h3>
+                </div>
+                <div className="chat-box" style={{ height: "70vh", overflowY: "scroll", position: "relative" }}>
                   <ScrollToBottom className="messages">
                     {messages.map((msg, index) => (
                       <div key={index} className={`message ${msg.sender === id._id || msg.senderId === id._id ? 'sender' : 'receiver'}`}>
@@ -131,11 +138,6 @@ function Chat() {
             {!selectedUser && <p className="mgs">No user selected</p>}
           </div>
         </div>
-        {!view && (
-          <div className="col-12 d-md-none">
-            <button className="btn btn-secondary mt-3" onClick={() => setView(true)}>Back to User List</button>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ function UserList({ onSelectUser }) {
   
     return (
       <div className="left">
+       <h1 className="display-4 text-center mt-2 mb-2 text-success  ">All Users</h1>
         <ul>
           {users.map((user) => (
             <li key={user._id} className="list-unstyled">
