@@ -79,10 +79,14 @@
   .sender {
     margin-left: auto;
     background-color: #6cd189;
+    width: fit-content; 
+    max-width: 70%;
   }
   
   .receiver {
     background-color: #e8e1e9;
+    width: fit-content; 
+    max-width: 70%;
   }
   .selected-user-name{
     background-color: rgb(130, 221, 130);

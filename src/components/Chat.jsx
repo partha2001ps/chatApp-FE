@@ -37,6 +37,7 @@ function Chat() {
     scrollToBottom();
   }, [messages]);
 
+
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -48,16 +49,17 @@ function Chat() {
         throw new Error('User data not found in sessionStorage');
       }
       const sender = JSON.parse(senderStr);
-      setId(sender.user)
-      const res = await axios.get(`https://chatapp-be-rghz.onrender.com/chat/${id._id}/${user._id}`);
+      setId(sender.user);
+      const userId = sender.user._id; 
+      const res = await axios.get(`https://chatapp-be-rghz.onrender.com/chat/${userId}/${user._id}`);
       setSelectedUser(user);
       setMessages(res.data);
-      setView(false); 
+      setView(false);
     } catch (error) {
       console.error(error);
     }
   };
-
+  
   const sendMessage = async () => {
     try {
       if (message.trim() !== "") {
