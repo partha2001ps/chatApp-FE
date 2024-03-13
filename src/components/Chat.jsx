@@ -3,18 +3,16 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import TimeAgo from 'timeago-react';
+import UserList from './UserList';
 
 function Chat() {
-  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
-  const [id, setId] = useState('');
   const [socket, setSocket] = useState(null);
   const messageEndRef = React.createRef();
-
+  const [id, setId] = useState('');
   useEffect(() => {
-    fetchData();
     const newSocket = io('https://chatapp-be-rghz.onrender.com');
     setSocket(newSocket);
 
@@ -41,23 +39,14 @@ function Chat() {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const fetchData = async () => {
+  const handleFetchData = async (user) => {
     try {
       const senderStr = await sessionStorage.getItem('userData');
       if (!senderStr) {
         throw new Error('User data not found in sessionStorage');
       }
       const sender = JSON.parse(senderStr);
-      setId(sender.user);
-      const res = await axios.get(`https://chatapp-be-rghz.onrender.com/${sender.user._id}`);
-      setUsers(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleFetchData = async (user) => {
-    try {
+      setId(sender.user)
       const res = await axios.get(`https://chatapp-be-rghz.onrender.com/chat/${id._id}/${user._id}`);
       setSelectedUser(user);
       setMessages(res.data);
@@ -87,18 +76,7 @@ function Chat() {
       <h2 className="text-center mt-3 text-success">Chat Application</h2>
       <div className="row">
         <div className="col-md-6 col-lg-4">
-          <div className="left">
-            <ul>
-              {users.map((user) => (
-                <li key={user._id} className="list-unstyled">
-                  <button onClick={() => handleFetchData(user)} className="user btn btn-primary btn-block">
-                    {user.name}
-                  </button>
-                  <hr className="hr" />
-                </li>
-              ))}
-            </ul>
-          </div>
+          <UserList onSelectUser={handleFetchData} />
         </div>
         <div className="col-md-6 col-lg-8">
           <div className="right" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
