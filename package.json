@@ -16,7 +16,10 @@
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.22.3",
     "react-scroll-to-bottom": "^4.2.0",
-    "socket.io-client": "^4.7.4"
+    "socket.io-client": "^4.7.4",
+    "timeago": "^1.6.7",
+    "timeago-react": "^3.0.6",
+    "timeago.js": "^4.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",

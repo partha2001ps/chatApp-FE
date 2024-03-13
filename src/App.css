@@ -66,4 +66,21 @@
     width: 500px;
     background-color: #cedeef;
     height: 90vh;
-}
+} 
+  .message {
+    word-wrap: break-word;
+    max-width: 70%;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .sender {
+    margin-left: auto;
+    background-color: #6cd189;
+  }
+  
+  .receiver {
+    background-color: #e8e1e9;
+  }
+  

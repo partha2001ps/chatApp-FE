@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import TimeAgo from 'timeago-react';
 
 function Chat() {
   const [users, setUsers] = useState([]);
@@ -14,7 +15,7 @@ function Chat() {
 
   useEffect(() => {
     fetchData();
-    const newSocket = io('http://localhost:3000');
+    const newSocket = io('https://chatapp-be-rghz.onrender.com');
     setSocket(newSocket);
 
     newSocket.on('message', (newMessage) => {
@@ -67,11 +68,11 @@ function Chat() {
 
   const sendMessage = async () => {
     try {
-      if (message.trim() !== "") {
+      if (message.trim() !== "") { 
         socket.emit('message', {
           senderId: id._id,
           receiverId: selectedUser._id,
-          newMessage: message 
+          newMessage: message,
         });
         setMessages(prevMessages => [...prevMessages, { senderId: id._id, receiverId: selectedUser._id, message: message }]);
         setMessage('');
@@ -90,7 +91,7 @@ function Chat() {
             <ul>
               {users.map((user) => (
                 <li key={user._id} className="list-unstyled">
-                  <button onClick={() => handleFetchData(user)} className="user">
+                  <button onClick={() => handleFetchData(user)} className="user btn btn-primary btn-block">
                     {user.name}
                   </button>
                   <hr className="hr" />
@@ -100,26 +101,45 @@ function Chat() {
           </div>
         </div>
         <div className="col-md-6 col-lg-8">
-          <div className="right">
+          <div className="right" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             {selectedUser && (
               <>
                 <h3 className="selected-user-name">{selectedUser.name}</h3>
-                <ScrollToBottom className="messages">
-                  {messages.map((msg, index) => (
-                    <div key={index} className="message">
-                      <p>{msg.message}</p>
-                    </div>
-                  ))}
-                  <div ref={messageEndRef} />
-                </ScrollToBottom>
-                <div className="input-box">
+                <div className="chat-box" style={{ flex: 1, maxHeight: "440px", overflowY: "scroll" }}>
+                  <ScrollToBottom className="messages">
+                    {messages.map((msg, index) => (
+                      <div key={index} className={`message ${msg.sender === id._id ||msg.senderId===id._id? 'sender' : 'receiver'}`}>
+                          <div className="message-content d-flex justify-content-between align-items-center">
+                        <div className="d-flex align-items-center">
+                          {msg.message}
+                        </div>
+                        <br />
+                        <div className=' text-end'>
+                        <sub className="timeago"><TimeAgo datetime={msg.timestamp} /></sub>
+                          </div>
+                          </div>
+                      </div>
+                    ))}
+
+                    <div ref={messageEndRef} />
+                  </ScrollToBottom>
+                </div>
+                <div className="input-group mt-3">
                   <input
                     type="text"
-                    placeholder="Type a message..."
+                    className="form-control"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                   />
-                  <button onClick={sendMessage}>Send</button>
+                  <div className="input-group-append">
+                    <button
+                      className="btn btn-primary fs-4"
+                      type="button"
+                      onClick={sendMessage}
+                    >
+                      ⩥
+                    </button>
+                  </div>
                 </div>
               </>
             )}
