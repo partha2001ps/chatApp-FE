@@ -110,7 +110,11 @@ function Chat() {
                           </div>
                           <br />
                           <div className='text-end'>
-                            <sub className="timeago"><TimeAgo datetime={msg.timestamp} /></sub>
+                            {new Date() - new Date(msg.timestamp) > 300000 ? (
+                              <sub>{new Date(msg.timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</sub>
+                            ) : (
+                              <sub className="timeago"><TimeAgo datetime={msg.timestamp} /></sub>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -118,6 +122,7 @@ function Chat() {
                     <div ref={messageEndRef} />
                   </ScrollToBottom>
                 </div>
+
                 <div className="input-group mt-3">
                   <input
                     type="text"

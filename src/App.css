@@ -65,7 +65,7 @@
 .left{
     width: 370px;
     background-color: #cedeef;
-    height: 80vh;
+    height: 90vh;
     overflow-y: scroll;
 } 
   .message {
@@ -96,3 +96,57 @@
   .name{
     margin-left: 25%;
   }
+  .time {
+    font-size: 0.8em;
+    color: #666; 
+  }
+  
+  .message-content {
+    margin-bottom: 10px;
+  }
+  
+  .sender .time {
+    margin-left: 10px; 
+  }
+  
+  .receiver .time {
+    margin-right: 10px; 
+  }
+  @media screen and (min-width: 780px) and (max-width: 1200px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .row {
+      width: 100%;
+    }
+  
+    .left {
+      width: 100%;
+      max-width: 390px; 
+      background-color: #cedeef;
+      height: 90vh;
+      overflow-x: hidden;
+    }
+  
+    .right {
+      width: 100%;
+      max-width: 600px; 
+    }
+  
+    .mgs {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+  
+    .user {
+      margin-left: auto;
+      margin-right: auto;
+      width: 80%;
+      text-align: center;
+    }
+  }
+  
