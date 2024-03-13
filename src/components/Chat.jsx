@@ -12,6 +12,8 @@ function Chat() {
   const [socket, setSocket] = useState(null);
   const messageEndRef = React.createRef();
   const [id, setId] = useState('');
+  const [view, setView] = useState(true);
+
   useEffect(() => {
     const newSocket = io('https://chatapp-be-rghz.onrender.com');
     setSocket(newSocket);
@@ -50,6 +52,7 @@ function Chat() {
       const res = await axios.get(`https://chatapp-be-rghz.onrender.com/chat/${id._id}/${user._id}`);
       setSelectedUser(user);
       setMessages(res.data);
+      setView(false); 
     } catch (error) {
       console.error(error);
     }
@@ -57,7 +60,7 @@ function Chat() {
 
   const sendMessage = async () => {
     try {
-      if (message.trim() !== "") { 
+      if (message.trim() !== "") {
         socket.emit('message', {
           senderId: id._id,
           receiverId: selectedUser._id,
@@ -70,35 +73,39 @@ function Chat() {
       console.log(error);
     }
   };
-  
+
+  const handleBack = () => {
+    setSelectedUser(null);
+    setView(true);
+  };
+
   return (
     <div className="container">
       <h2 className="text-center mt-3 text-success">Chat Application</h2>
       <div className="row">
-        <div className="col-md-6 col-lg-4">
+        <div className={view ? "col-md-6 col-lg-4" : "col-md-6 col-lg-4 d-none d-md-block"}>
           <UserList onSelectUser={handleFetchData} />
         </div>
-        <div className="col-md-6 col-lg-8">
+        <div className={view ? "col-md-6 col-lg-8 d-none d-md-block" : "col-md-6 col-lg-8"}>
           <div className="right" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             {selectedUser && (
               <>
                 <h3 className="selected-user-name">{selectedUser.name}</h3>
-                <div className="chat-box" style={{ flex: 1, maxHeight: "440px", overflowY: "scroll" }}>
+                <div className="chat-box" style={{ height: "78vh", overflowY: "scroll", position: "relative" }}>
                   <ScrollToBottom className="messages">
                     {messages.map((msg, index) => (
-                      <div key={index} className={`message ${msg.sender === id._id ||msg.senderId===id._id? 'sender' : 'receiver'}`}>
-                          <div className="message-content d-flex justify-content-between align-items-center">
-                        <div className="d-flex align-items-center">
-                          {msg.message}
+                      <div key={index} className={`message ${msg.sender === id._id || msg.senderId === id._id ? 'sender' : 'receiver'}`}>
+                        <div className="message-content d-flex justify-content-between align-items-center">
+                          <div className="d-flex align-items-center">
+                            {msg.message}
+                          </div>
+                          <br />
+                          <div className='text-end'>
+                            <sub className="timeago"><TimeAgo datetime={msg.timestamp} /></sub>
+                          </div>
                         </div>
-                        <br />
-                        <div className=' text-end'>
-                        <sub className="timeago"><TimeAgo datetime={msg.timestamp} /></sub>
-                          </div>
-                          </div>
                       </div>
                     ))}
-
                     <div ref={messageEndRef} />
                   </ScrollToBottom>
                 </div>
@@ -124,6 +131,11 @@ function Chat() {
             {!selectedUser && <p className="mgs">No user selected</p>}
           </div>
         </div>
+        {!view && (
+          <div className="col-12 d-md-none">
+            <button className="btn btn-secondary mt-3" onClick={() => setView(true)}>Back to User List</button>
+          </div>
+        )}
       </div>
     </div>
   );

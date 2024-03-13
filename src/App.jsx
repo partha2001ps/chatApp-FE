@@ -5,6 +5,7 @@ import SignIn from './components/SignIn'
 import Chat from './components/Chat'
 import Resetpassword from './components/ResetPassword'
 import Newpassword from './components/NewPassword'
+import UserList from './components/UserList'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='/chat' element={<Chat />} />
           <Route path='/reset-password' element={<Resetpassword />} />
           <Route path='/reset-password/new-password/:OTP' element={<Newpassword />} />
+          <Route path='/user' element={<UserList/>} />
         </Routes>
       </Router>
     </div>

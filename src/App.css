@@ -50,12 +50,12 @@
     margin-top: 5%;
     margin-bottom: -5%;
     border: none;
-    width: 400px;
+    width: 300px;
    text-align: left;
    height: 40px;
 }
 .hr{
-    width: 400px;
+    width: 300px;
 }
 .mgs{
     color: red;
@@ -63,9 +63,10 @@
     margin-left: 50%;
 }
 .left{
-    width: 500px;
+    width: 370px;
     background-color: #cedeef;
-    height: 90vh;
+    height: 80vh;
+    overflow-y: scroll;
 } 
   .message {
     word-wrap: break-word;
@@ -83,4 +84,8 @@
   .receiver {
     background-color: #e8e1e9;
   }
-  
+  .selected-user-name{
+    background-color: rgb(130, 221, 130);
+    padding: 10px;
+    border-radius: 10px;
+  }
