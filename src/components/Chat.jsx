@@ -68,7 +68,7 @@ function Chat() {
           receiverId: selectedUser._id,
           newMessage: message,
         });
-        setMessages(prevMessages => [...prevMessages, { senderId: id._id, receiverId: selectedUser._id, message: message }]);
+        setMessages(prevMessages => [...prevMessages, { senderId: id._id, receiverId: selectedUser._id, message: message, timestamp: new Date().toISOString() }]);
         setMessage('');
       }
     } catch (error) {
@@ -79,6 +79,34 @@ function Chat() {
   const handleBack = () => {
     setSelectedUser(null);
     setView(true);
+  };
+
+  // Function to group messages by date
+  const groupMessagesByDate = (messages) => {
+    const groupedMessages = {};
+    messages.forEach(msg => {
+      const date = new Date(msg.timestamp).toDateString();
+      if (groupedMessages[date]) {
+        groupedMessages[date].push(msg);
+      } else {
+        groupedMessages[date] = [msg];
+      }
+    });
+    return groupedMessages;
+  };
+
+
+  const formatTimestamp = (timestamp) => {
+    const messageDate = new Date(timestamp);
+    if (isNaN(messageDate.getTime())) {
+      return 'Invalid Date';
+    }
+    const currentTime = new Date();
+    if (currentTime) {
+      return messageDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    } else {
+      return <TimeAgo datetime={timestamp} />;
+    }
   };
 
   return (
@@ -102,21 +130,22 @@ function Chat() {
                 </div>
                 <div className="chat-box" style={{ height: "70vh", overflowY: "scroll", position: "relative" }}>
                   <ScrollToBottom className="messages">
-                    {messages.map((msg, index) => (
-                      <div key={index} className={`message ${msg.sender === id._id || msg.senderId === id._id ? 'sender' : 'receiver'}`}>
-                        <div className="message-content d-flex justify-content-between align-items-center">
-                          <div className="d-flex align-items-center">
-                            {msg.message}
+                    {Object.entries(groupMessagesByDate(messages)).map(([date, msgs], index) => (
+                      <div key={index}>
+                        <div className="message-date text-bg-info text-center m-3">{date}</div>
+                        {msgs.map((msg, msgIndex) => (
+                          <div key={msgIndex} className={`message ${msg.sender === id._id || msg.senderId === id._id ? 'sender' : 'receiver'}`}>
+                            <div className="message-content d-flex justify-content-between align-items-center">
+                              <div className="d-flex align-items-center">
+                                {msg.message}
+                              </div>
+                              <br />
+                              <sub className='text-end'>
+                                {formatTimestamp(msg.timestamp)}
+                              </sub>
+                            </div>
                           </div>
-                          <br />
-                          <div className='text-end'>
-                            {new Date() - new Date(msg.timestamp) > 300000 ? (
-                              <sub>{new Date(msg.timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</sub>
-                            ) : (
-                              <sub className="timeago"><TimeAgo datetime={msg.timestamp} /></sub>
-                            )}
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     ))}
                     <div ref={messageEndRef} />
