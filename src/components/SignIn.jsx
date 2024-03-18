@@ -23,7 +23,7 @@ function SignIn() {
         try {
             setLoading(true);
             const res = await axios.post('https://chatapp-be-rghz.onrender.com/signin', formData);
-            console.log(res.data);
+            // console.log(res.data);
             setMessage(res.data.message);
             setLoading(false);
             if (res.data.message === 'User Login success') {

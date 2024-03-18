@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import axios from 'axios';
 import { RotatingLines } from 'react-loader-spinner';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function SignUp() {
     const [formData, setFormData] = useState({
@@ -13,6 +13,8 @@ function SignUp() {
     });
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
+    const [mgs,setMgs]=useState('')
 
     const { name, email, password, confirmPassword } = formData;
 
@@ -35,7 +37,11 @@ function SignUp() {
         }
         try {
             const res = await axios.post('https://chatapp-be-rghz.onrender.com/', formData);
-            console.log(res.data);
+            // console.log(res.data);
+            setMgs(res.data.message)
+            if (res.data.message == 'user created') {  
+                navigate('/')
+            }
             setFormData({
                 name: '', email: '', password:'',confirmPassword:''})
             setLoading(false);
@@ -120,7 +126,7 @@ function SignUp() {
                                         wrapperStyle={{}}
                                         wrapperClass=""
                                     /></div>) : (<div>Submit</div>)}</button>
-                               
+                                    <div><p>{ mgs}</p></div>
                                 </div>
                             </form>
                         </div>
