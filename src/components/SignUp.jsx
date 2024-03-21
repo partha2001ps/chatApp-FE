@@ -3,66 +3,52 @@ import '../App.css';
 import axios from 'axios';
 import { RotatingLines } from 'react-loader-spinner';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function SignUp() {
-    const [pic,setPic]=useState()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
     });
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
     const [mgs,setMgs]=useState('')
 
-    const { name, email, password } = formData;
+    const { name, email, password, confirmPassword } = formData;
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const postDetails = (pics) => {
-        // console.log(pics);
-        if (pics.type === "image/jpeg" || pics.type === "image/png") {
-            const data = new FormData();
-            data.append("file", pics);
-            data.append("upload_preset", "chat-App");
-            data.append("cloud_name", "duygowamx");
-            fetch("https://api.cloudinary.com/v1_1/duygowamx/image/upload/", {
-                method: "POST",
-                body: data,
-            })
-            .then((res) => res.json())
-            .then((data) => {
-                setPic(data.url);
-                // console.log(data.url.toString());
-            })
-            .catch((err) => {
-                console.error("Error uploading image:", err);
-            });
-        } else {
-            console.error("Unsupported file type");
-        }
-    };
-    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if (!name || !email || !password ) {
+        if (!name || !email || !password || !confirmPassword) {
             setErrorMessage('All fields are required.');
             setLoading(false);
             return;
         }
+        if (password !== confirmPassword) {
+            setErrorMessage('Passwords do not match.');
+            setLoading(false);
+            return;
+        }
         try {
-            const res = await axios.post('https://chatapp-be-rghz.onrender.com/', { ...formData, pic });
-            // console.log(res.data,formData);
+            const res = await axios.post('https://chatapp-be-rghz.onrender.com/', formData);
+            // console.log(res.data);
             setMgs(res.data.message)
-            if (res.data.message == 'user created') {  
-                navigate('/')
+      
+            if (res.data.message === 'user created') {
+                setTimeout(() => {
+                    navigate('/');
+                }, 5000); 
             }
             setFormData({
-                name: '', email: '', password:''})
+                name: '', email: '', password:'',confirmPassword:''})
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);
@@ -72,6 +58,7 @@ function SignUp() {
 
     return (
         <div className="container">
+            <ToastContainer/>
             <div className="row justify-content-center mt-5">
                 <div className="col-md-6">
                     <h1 className="mb-4 text-center text-primary">Welcome to Chat App</h1>
@@ -116,18 +103,20 @@ function SignUp() {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="photo">Photo</label>
+                                    <label htmlFor="confirmPassword">Confirm Password</label>
                                     <input
-                                        type="file"
+                                        type="password"
                                         className="form-control"
-                                        id="pic"
-                                        name="pic"
-                                        onChange={(e) => postDetails(e.target.files[0])}
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        placeholder="Confirm your password"
+                                        value={confirmPassword}
+                                        onChange={handleChange}
                                     />
                                 </div>
                                 <div>
                                     <div className='mb-3'>
-                                        <Link to='/'>Already have an account? Sign in</Link>
+                                        <Link  to='/'>Already have an account? Sign in</Link>
                                     </div>
 
                                 </div>
@@ -143,7 +132,7 @@ function SignUp() {
                                         wrapperStyle={{}}
                                         wrapperClass=""
                                     /></div>) : (<div>Submit</div>)}</button>
-                                    <div><p>{mgs}</p></div>
+                                    <div><p className=' text-danger  mt-2'>{ mgs}</p></div>
                                 </div>
                             </form>
                         </div>

@@ -3,6 +3,8 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import NavLink from './NavLink';
 import { RotatingLines } from 'react-loader-spinner';
 import { authInstance } from '../services/instance';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function Profile() {
   const [name, setName] = useState('');
@@ -26,7 +28,7 @@ function Profile() {
       })
       .then((res) => res.json())
         .then((data) => {
-        console.log(data.url)
+        // console.log(data.url)
           setPic(data.url);
           setLoading(false)
       })
@@ -50,7 +52,7 @@ function Profile() {
       try {
         const res = await authInstance.get(`/user/me/${id}`);
         setFormdata(res.data);
-        console.log(res.data)
+        // console.log(res.data)
       } catch (error) {
         console.log(error);
       }
@@ -84,6 +86,7 @@ function Profile() {
       if (res.data.pic) {
         setPic(res.data.pic);
       }
+      toast.success('User edit success')
       setEditMode(false);
     } catch (error) {
       console.log(error);
@@ -92,7 +95,7 @@ function Profile() {
 
   return (
     <div className="container-f">
-      <NavLink />
+      <NavLink /><ToastContainer/>
       <div className="container row justify-content-center mt-5">
         <div className="col-md-8">
           {formdata && (
