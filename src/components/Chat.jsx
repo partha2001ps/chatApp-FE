@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import TimeAgo from 'timeago-react';
 import UserList from './UserList';
+import NavLink from './NavLink';
 
 function Chat() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -110,8 +111,8 @@ function Chat() {
   };
 
   return (
-    <div className="container">
-      <h2 className="text-center mt-3 text-success">Chat Application</h2>
+    <div className="container-f">
+     <NavLink/>
       <div className="row">
         <div className={view ? "col-md-6 col-lg-4" : "col-md-6 col-lg-4 d-none d-md-block"}>
           <UserList onSelectUser={handleFetchData} />
@@ -126,6 +127,7 @@ function Chat() {
                       <button className="btn" onClick={() => setView(true)}>🔙</button>
                     </div>
                   )}
+                  <img src={`${selectedUser.pic}`} alt=""  className='img-chat' />
                   <h3 className='name'>{selectedUser.name}</h3>
                 </div>
                 <div className="chat-box" style={{ height: "70vh", overflowY: "scroll", position: "relative" }}>

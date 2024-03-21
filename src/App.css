@@ -46,13 +46,19 @@
 .sign-up-form button[type="submit"]:hover {
     background-color: #0056b3;
 }
+.pro-name{
+  margin-top: 5%;
+  width: 100%;
+}
 .user{
     margin-top: 5%;
     margin-bottom: -5%;
     border: none;
     width: 300px;
+    border-radius: 5px;
    text-align: left;
-   height: 40px;
+   height: 60px;
+   background-color: #9dddba;
 }
 .hr{
     width: 300px;
@@ -67,6 +73,7 @@
     background-color: #cedeef;
     height: 90vh;
     overflow-y: scroll;
+    position: relative;
 } 
   .message {
     word-wrap: break-word;
@@ -94,7 +101,8 @@
     border-radius: 10px;
   }
   .name{
-    margin-left: 25%;
+    margin-left: 2%;
+    margin-top: 10px;
   }
   .time {
     font-size: 0.8em;
@@ -141,12 +149,68 @@
       margin-right: auto;
       text-align: center;
     }
-  
-    .user {
-      margin-left: auto;
-      margin-right: auto;
-      width: 80%;
-      text-align: center;
-    }
   }
-  
+  .img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+   margin-left: 10px;
+  }
+  .profile{
+   margin-right: 50px;
+  }
+  .logout{
+    margin-right: 0px;
+  }
+  @media screen and (min-width:550px) and (max-width: 768px) {
+  .left{
+    margin-top: 10px;
+margin-left: 23%;
+border-radius: 10px;
+  }
+.img-chat{
+  margin-left: 25%;
+}
+  }
+  @media(max-width:550px){
+    .left{
+      width: 100%;
+    }
+    .profile{
+      margin-right: 25px;
+     }
+     .logout{
+       margin-right: 0px;
+     }
+     .single-img {
+      position: absolute;
+      top: 30% !important;
+  }
+  .img-chat{
+    margin-left: 10%;
+  }
+  }
+
+  .profile-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto; 
+  }
+  .single-img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.img-chat{
+  width: 50px;
+ border-radius: 50%;
+}

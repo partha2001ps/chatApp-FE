@@ -5,45 +5,64 @@ import { RotatingLines } from 'react-loader-spinner';
 import { Link, useNavigate } from 'react-router-dom';
 
 function SignUp() {
+    const [pic,setPic]=useState()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        password: '',
-        confirmPassword: ''
+        password: ''
     });
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
     const [mgs,setMgs]=useState('')
 
-    const { name, email, password, confirmPassword } = formData;
+    const { name, email, password } = formData;
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const postDetails = (pics) => {
+        // console.log(pics);
+        if (pics.type === "image/jpeg" || pics.type === "image/png") {
+            const data = new FormData();
+            data.append("file", pics);
+            data.append("upload_preset", "chat-App");
+            data.append("cloud_name", "duygowamx");
+            fetch("https://api.cloudinary.com/v1_1/duygowamx/image/upload/", {
+                method: "POST",
+                body: data,
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                setPic(data.url);
+                // console.log(data.url.toString());
+            })
+            .catch((err) => {
+                console.error("Error uploading image:", err);
+            });
+        } else {
+            console.error("Unsupported file type");
+        }
+    };
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if (!name || !email || !password || !confirmPassword) {
+        if (!name || !email || !password ) {
             setErrorMessage('All fields are required.');
             setLoading(false);
             return;
         }
-        if (password !== confirmPassword) {
-            setErrorMessage('Passwords do not match.');
-            setLoading(false);
-            return;
-        }
         try {
-            const res = await axios.post('https://chatapp-be-rghz.onrender.com/', formData);
-            // console.log(res.data);
+            const res = await axios.post('https://chatapp-be-rghz.onrender.com/', { ...formData, pic });
+            // console.log(res.data,formData);
             setMgs(res.data.message)
             if (res.data.message == 'user created') {  
                 navigate('/')
             }
             setFormData({
-                name: '', email: '', password:'',confirmPassword:''})
+                name: '', email: '', password:''})
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);
@@ -97,20 +116,18 @@ function SignUp() {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="confirmPassword">Confirm Password</label>
+                                    <label htmlFor="photo">Photo</label>
                                     <input
-                                        type="password"
+                                        type="file"
                                         className="form-control"
-                                        id="confirmPassword"
-                                        name="confirmPassword"
-                                        placeholder="Confirm your password"
-                                        value={confirmPassword}
-                                        onChange={handleChange}
+                                        id="pic"
+                                        name="pic"
+                                        onChange={(e) => postDetails(e.target.files[0])}
                                     />
                                 </div>
                                 <div>
                                     <div className='mb-3'>
-                                        <Link  to='/'>Already have an account? Sign in</Link>
+                                        <Link to='/'>Already have an account? Sign in</Link>
                                     </div>
 
                                 </div>
@@ -126,7 +143,7 @@ function SignUp() {
                                         wrapperStyle={{}}
                                         wrapperClass=""
                                     /></div>) : (<div>Submit</div>)}</button>
-                                    <div><p>{ mgs}</p></div>
+                                    <div><p>{mgs}</p></div>
                                 </div>
                             </form>
                         </div>
