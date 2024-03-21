@@ -41,7 +41,7 @@ function SignUp() {
             const res = await axios.post('https://chatapp-be-rghz.onrender.com/', formData);
             // console.log(res.data);
             setMgs(res.data.message)
-      
+      toast.success('user Created success')
             if (res.data.message === 'user created') {
                 setTimeout(() => {
                     navigate('/');
@@ -132,7 +132,7 @@ function SignUp() {
                                         wrapperStyle={{}}
                                         wrapperClass=""
                                     /></div>) : (<div>Submit</div>)}</button>
-                                    <div><p className=' text-danger  mt-2'>{ mgs}</p></div>
+                                    <div><p className=' text-danger  mt-2 '>{ mgs}</p></div>
                                 </div>
                             </form>
                         </div>
