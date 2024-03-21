@@ -104,7 +104,7 @@ function Chat() {
     }
     const currentTime = new Date();
     if (currentTime) {
-      return messageDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      return messageDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true  });
     } else {
       return <TimeAgo datetime={timestamp} />;
     }
